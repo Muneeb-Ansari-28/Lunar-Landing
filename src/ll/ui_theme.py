@@ -1,0 +1,45 @@
+"""Shared UI theme colors, typography definitions, and HUD layout parameters."""
+
+# Visual Palette
+COLOR_SPACE_BG = (10, 12, 18)
+COLOR_SPACE_STARS = (220, 225, 240)
+COLOR_MOON_SURFACE = (140, 142, 150)
+COLOR_MOON_SURFACE_DARK = (90, 92, 100)
+COLOR_MOON_CRATER = (70, 72, 80)
+COLOR_PAD = (230, 200, 50)
+COLOR_PAD_MARK = (200, 80, 40)
+COLOR_FLAG_POLE = (200, 200, 200)
+COLOR_FLAG_CLOTH = (220, 50, 50)
+
+# Spacecraft Palette
+COLOR_LANDER_BODY = (225, 230, 240)
+COLOR_LANDER_WINDOW = (60, 140, 220)
+COLOR_LANDER_LEG = (160, 165, 175)
+COLOR_LANDER_FOOT = (220, 180, 50)
+COLOR_FLAME_CORE = (255, 255, 200)
+COLOR_FLAME_INNER = (255, 180, 40)
+COLOR_FLAME_OUTER = (230, 60, 20)
+
+# HUD & Telemetry Palette
+COLOR_HUD_BG = (15, 20, 30, 210)  # Semi-transparent dark slate
+COLOR_HUD_BORDER = (50, 70, 100)
+COLOR_TEXT_TITLE = (240, 245, 255)
+COLOR_TEXT_PRIMARY = (210, 220, 235)
+COLOR_TEXT_MUTED = (130, 145, 165)
+COLOR_TEXT_SUCCESS = (60, 220, 120)
+COLOR_TEXT_WARNING = (255, 190, 40)
+COLOR_TEXT_DANGER = (255, 70, 70)
+
+# Telemetry Config Colors
+CONFIG_COLORS = {
+    "random": (160, 165, 175),
+    "baseline": (60, 140, 255),
+    "time_penalty": (40, 200, 180),
+    "hover_hack": (255, 80, 80),
+    "fixed": (50, 210, 110),
+}
+
+HUD_WIDTH = 340
+HUD_PADDING = 15
+LINE_HEIGHT = 22
+

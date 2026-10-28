@@ -1,0 +1,6 @@
+config,seed,timesteps,elapsed_sec
+baseline,0,100000,48.02
+baseline,0,100000,46.43
+hover_hack,0,100000,48.17
+fixed,0,100000,46.50
+baseline,0,500000,421.28

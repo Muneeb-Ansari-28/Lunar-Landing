@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.hypothesis/
+*.egg-info/
+build/
+dist/
+
+# Virtual Environments & Secrets
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.log
+
+# Training logs & intermediate checkpoints (keep final model.zip & progress.csv)
+runs/**/tb/
+runs/**/checkpoints/
+events.out.tfevents.*
+
+# Archives & Temporary files
+assets/*.zip
+*.tmp
+
+# Operating System & Editor Metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
