@@ -8,18 +8,17 @@
 
 An end-to-end, high-performance Reinforcement Learning project investigating **reward shaping** and **reward hacking** in Gymnasium's Box2D `LunarLander-v3`. Features a custom high-definition real-time aerospace simulator, pre-trained high-performance PPO neural agents, and an interactive desktop flight console.
 
-Based on the research paper:
-> *"Training an AI to land a rocket with reward shaping: how it works and how to build it"* by Hari (@harixganesh)
-
 ---
 
 ## 📸 Simulation Showcase
 
 ### 1. High-Altitude Orbital Insertion Descent
+
 The spacecraft enters from high orbit ($y \approx 20\,\text{m}$), calculating retrograde burns and nulling horizontal drift across an expansive cosmic vista:
 ![High Altitude Orbital Descent](figures/high_orbit_snap.png)
 
 ### 2. Precision Touchdown on Pad `LZ-1 ALPHA`
+
 Autonomous deceleration burn and pinpoint touchdown with locked landing gear, active approach runway LEDs, and flight telemetry:
 ![Touchdown](figures/live_snap_touchdown.png)
 
@@ -44,18 +43,19 @@ Reinforcement Learning agents optimize strictly for the mathematical signal they
    $$\sum_{t=0}^{T} F(s_t, s_{t+1}) = -\Phi(s_0) \le 0$$
    This mathematically proves that no infinite reward farming is possible while preserving policy invariance.
 
-| Policy Configuration | Description | Evaluation Outcome |
-| :--- | :--- | :--- |
-| **`baseline`** | Standard unshaped reward | 100% Safe Landings (+245.3 Avg Return) |
-| **`hover_hack`** | Upright bonus exploit | Perpetual Hovering, Never Lands |
-| **`fixed`** | Potential-Based Shaping (PBRS) | Fast, fuel-efficient safe touchdown |
-| **`random`** | Untrained stochastic policy | Immediate crash / tumble |
+| Policy Configuration | Description                    | Evaluation Outcome                     |
+| :------------------- | :----------------------------- | :------------------------------------- |
+| **`baseline`**       | Standard unshaped reward       | 100% Safe Landings (+245.3 Avg Return) |
+| **`hover_hack`**     | Upright bonus exploit          | Perpetual Hovering, Never Lands        |
+| **`fixed`**          | Potential-Based Shaping (PBRS) | Fast, fuel-efficient safe touchdown    |
+| **`random`**         | Untrained stochastic policy    | Immediate crash / tumble               |
 
 ---
 
 ## 🎮 Interactive Real-Time Desktop Simulator
 
 The custom Pygame-CE HD renderer features:
+
 - **Dual-Layer Additive Supersonic Plume:** Combining Mach shock diamonds with turbulent plasma tendrils using `BLEND_RGBA_ADD` and dynamic flicker.
 - **Accurate Nozzle Alignment:** Exhaust root originates inside the engine bell with zero detached air gap.
 - **Cold-Gas RCS Thrusters:** Directional hypergolic/nitrogen vapor jets emitting from cabin quads.
@@ -65,26 +65,29 @@ The custom Pygame-CE HD renderer features:
 - **Glass-Cockpit Telemetry HUD:** Real-time altitude, sink rate safety indicator, pitch attitude, contact sensors, and score.
 
 ### Simulator Hotkeys:
-| Key | Action |
-| :---: | :--- |
-| **`[SPACE]`** | Pause / Resume real-time simulation |
-| **`[R]`** | Restart / Reset current landing attempt |
-| **`[A]`** | **Toggle Altitude Profile** (High Orbit $20\,\text{m}$ vs Standard $13\,\text{m}$) |
-| **`[C]`** | **Cycle Policy** (`baseline` $\to$ `hover_hack` $\to$ `fixed` $\to$ `random`) |
-| **`[1-4]`** | Warp speed factor ($0.5\times$, $1.0\times$, $2.0\times$, $4.0\times$) |
-| **`[ESC / Q]`**| Exit viewer and return to launcher menu |
+
+|       Key       | Action                                                                             |
+| :-------------: | :--------------------------------------------------------------------------------- |
+|  **`[SPACE]`**  | Pause / Resume real-time simulation                                                |
+|    **`[R]`**    | Restart / Reset current landing attempt                                            |
+|    **`[A]`**    | **Toggle Altitude Profile** (High Orbit $20\,\text{m}$ vs Standard $13\,\text{m}$) |
+|    **`[C]`**    | **Cycle Policy** (`baseline` $\to$ `hover_hack` $\to$ `fixed` $\to$ `random`)      |
+|   **`[1-4]`**   | Warp speed factor ($0.5\times$, $1.0\times$, $2.0\times$, $4.0\times$)             |
+| **`[ESC / Q]`** | Exit viewer and return to launcher menu                                            |
 
 ---
 
 ## ⚡ Quick Start
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Muneeb-Ansari-28/Lunar-Landing.git
 cd Lunar-Landing
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 # Python 3.10+ recommended
 pip install -r requirements.txt
@@ -92,16 +95,21 @@ pip install -e .
 ```
 
 ### 3. Launch Interactive Console
+
 On Windows:
+
 ```powershell
 .\run.ps1
 ```
+
 Or directly with Python:
+
 ```bash
 python main.py
 ```
 
 ### Direct CLI Commands:
+
 ```bash
 # Launch high-altitude orbital descent immediately:
 python -m ll.live_viewer --config baseline --altitude high
@@ -153,10 +161,13 @@ Lunar_Landing/
 ## 🧪 Verification & Invariant Testing
 
 The project includes unit and invariant property-based tests verifying algebraic bounds and environment stability:
+
 ```bash
 pytest tests/ -v
 ```
+
 All 7 invariant tests verify:
+
 - Bounded telescoping sums $\sum F(s, s') \le 0$
 - Safe touchdown detection vs timeout truncation
 - Headless rendering output shape `(720, 1280, 3)`
@@ -165,9 +176,11 @@ All 7 invariant tests verify:
 ---
 
 ## 📜 References
-- Ng, A. Y., Harada, D., & Russell, S. (1999). *Policy invariance under reward transformations: Theory and application to reward shaping*. ICML.
+
+- Ng, A. Y., Harada, D., & Russell, S. (1999). _Policy invariance under reward transformations: Theory and application to reward shaping_. ICML.
 - Farama Foundation Gymnasium: [`LunarLander-v3`](https://gymnasium.farama.org/environments/box2d/lunar_lander/).
 - Stable-Baselines3: Reliable Reinforcement Learning Implementations.
 
 ---
-*Created by [Muneeb Ansari](https://github.com/Muneeb-Ansari-28)*
+
+_Created by [Muneeb Ansari](https://github.com/Muneeb-Ansari-28)_
