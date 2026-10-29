@@ -8,6 +8,8 @@
 
 An end-to-end, high-performance Reinforcement Learning project investigating **reward shaping** and **reward hacking** in Gymnasium's Box2D `LunarLander-v3`. Features a custom high-definition real-time aerospace simulator, pre-trained high-performance PPO neural agents, and an interactive desktop flight console.
 
+The project combines reproducible experiments with a visual simulator so that reward-design trade-offs can be inspected both numerically and during live flight.
+
 ---
 
 ## 📸 Simulation Showcase
