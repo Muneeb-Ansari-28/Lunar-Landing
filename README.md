@@ -81,22 +81,22 @@ The custom Pygame-CE renderer provides:
 
 ## ⚡ Quick Start
 
-### 1. Clone the Repository
+### 1. Clone the project
 
 ```bash
 git clone https://github.com/Muneeb-Ansari-28/Lunar-Landing.git
 cd Lunar-Landing
 ```
 
-### 2. Install Dependencies
+### 2. Install the dependencies
 
 ```bash
-# Python 3.10+ recommended
+# Python 3.10 or newer is recommended
 pip install -r requirements.txt
 pip install -e .
 ```
 
-### 3. Launch Interactive Console
+### 3. Start the interactive console
 
 On Windows:
 
@@ -110,19 +110,19 @@ Or directly with Python:
 python main.py
 ```
 
-### Direct CLI Commands:
+### Useful CLI commands
 
 ```bash
-# Launch high-altitude orbital descent immediately:
+# Start a high-altitude orbital descent:
 python -m ll.live_viewer --config baseline --altitude high
 
-# Launch hover-hack policy to witness reward farming:
+# Observe the hover-hack policy:
 python -m ll.live_viewer --config hover_hack
 
-# Launch random crash test:
+# Run a random-policy crash test:
 python -m ll.live_viewer --config random
 
-# Run unit and property tests:
+# Run the unit and property tests:
 pytest tests/ -v
 ```
 
@@ -160,20 +160,20 @@ Lunar_Landing/
 
 ---
 
-## 🧪 Verification & Invariant Testing
+## 🧪 Verification and Invariant Testing
 
-The project includes unit and invariant property-based tests verifying algebraic bounds and environment stability:
+The test suite includes unit and invariant property-based checks for algebraic bounds and environment stability:
 
 ```bash
 pytest tests/ -v
 ```
 
-All 7 invariant tests verify:
+The seven invariant checks cover:
 
 - Bounded telescoping sums $\sum F(s, s') \le 0$
-- Safe touchdown detection vs timeout truncation
+- Safe-touchdown detection versus timeout truncation
 - Headless rendering output shape `(720, 1280, 3)`
-- Coordinate transformation matrix mapping $(0, 0) \to (0, 720)$ and $(W, H) \to (1280, 0)$
+- Coordinate transformation mapping $(0, 0) \to (0, 720)$ and $(W, H) \to (1280, 0)$
 
 ---
 
