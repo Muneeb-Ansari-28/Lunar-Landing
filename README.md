@@ -1,4 +1,4 @@
-# 🚀 Lunar Lander: Reinforcement Learning, Reward Shaping & Live Simulation
+# 🚀 Lunar Lander: Reinforcement Learning, Reward Design & Live Simulation
 
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![Gymnasium](https://img.shields.io/badge/Gymnasium-v1.0%2B-orange.svg)](https://gymnasium.farama.org/)
@@ -6,22 +6,22 @@
 [![Pygame-CE](https://img.shields.io/badge/Pygame--CE-v2.5%2B-brightgreen.svg)](https://pyga.me/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
-An end-to-end, high-performance Reinforcement Learning project investigating **reward shaping** and **reward hacking** in Gymnasium's Box2D `LunarLander-v3`. Features a custom high-definition real-time aerospace simulator, pre-trained high-performance PPO neural agents, and an interactive desktop flight console.
+This end-to-end Reinforcement Learning project examines **reward shaping** and **reward hacking** in Gymnasium's Box2D `LunarLander-v3`. It includes a custom high-definition aerospace simulator, pre-trained PPO agents, and an interactive desktop flight console.
 
-The project combines reproducible experiments with a visual simulator so that reward-design trade-offs can be inspected both numerically and during live flight.
+Reproducible experiments and live visualizations work together here, making it possible to study reward-design trade-offs through both metrics and flight behavior.
 
 ---
 
 ## 📸 Simulation Showcase
 
-### 1. High-Altitude Orbital Insertion Descent
+### 1. High-Altitude Orbital Descent
 
-The spacecraft enters from high orbit ($y \approx 20\,\text{m}$), calculating retrograde burns and nulling horizontal drift across an expansive cosmic vista:
+The spacecraft begins from high orbit ($y \approx 20\,\text{m}$), uses retrograde burns to reduce its velocity, and corrects horizontal drift against an expansive cosmic backdrop:
 ![High Altitude Orbital Descent](figures/high_orbit_snap.png)
 
-### 2. Precision Touchdown on Pad `LZ-1 ALPHA`
+### 2. Precision Touchdown at Pad `LZ-1 ALPHA`
 
-Autonomous deceleration burn and pinpoint touchdown with locked landing gear, active approach runway LEDs, and flight telemetry:
+The agent performs an autonomous deceleration burn and precise touchdown while the simulator displays locked landing gear, approach-runway LEDs, and flight telemetry:
 ![Touchdown](figures/live_snap_touchdown.png)
 
 ---
