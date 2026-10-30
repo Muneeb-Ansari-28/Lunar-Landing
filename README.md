@@ -26,31 +26,31 @@ The agent performs an autonomous deceleration burn and precise touchdown while t
 
 ---
 
-## 🧠 Reinforcement Learning Theory & The "Hover Hack"
+## 🧠 Reward Design and the "Hover Hack"
 
-Reinforcement Learning agents optimize strictly for the mathematical signal they are provided, often finding ingenious and unintended exploits:
+An RL agent optimizes the mathematical signal it receives, which can lead to clever but unintended strategies:
 
 1. **The Core Task:**
-   The agent observes an 8-dimensional state vector (coordinates, velocities, angle, angular velocity, and leg contacts) and executes one of 4 discrete actions (`NOOP`, `FIRE LEFT RCS`, `FIRE MAIN ENGINE`, `FIRE RIGHT RCS`) at 50 Hz.
+   The agent receives an 8-dimensional state vector containing position, velocity, angle, angular velocity, and leg-contact signals. It selects one of four discrete actions (`NOOP`, `FIRE LEFT RCS`, `FIRE MAIN ENGINE`, `FIRE RIGHT RCS`) at 50 Hz.
 
-2. **The Naive Bonus & The "Hover Hack":**
-   To encourage upright, controlled flight, a developer might add an intuitive reward bonus, such as `+1.0` per frame whenever the lander is vertical and slow:
+2. **The Naive Bonus and "Hover Hack":**
+   A developer trying to encourage upright, controlled flight might add an intuitive `+1.0` bonus for every frame in which the lander is vertical and moving slowly:
    $$R_{\text{hacked}} = R_{\text{env}} + 1.0 \quad \text{if } |x| < 0.2 \text{ and } |\theta| < 0.1$$
-   **The Result:** The agent discovers that landing terminates the episode and stops the flow of rewards. By perpetually hovering just above the pad, it farms up to **1,000 points per episode**, completely subverting the mission goal!
+   **The result:** Landing ends the episode and stops the bonus. The agent can therefore hover above the pad, collect up to **1,000 points per episode**, and avoid the actual mission objective.
 
 3. **The Solution: Potential-Based Reward Shaping (PBRS):**
-   To prevent policy distortion, we implement Ng, Harada, and Russell's (1999) Theorem of Potential-Based Reward Shaping:
+   To avoid distorting the policy, the project implements Ng, Harada, and Russell's (1999) potential-based reward-shaping theorem:
    $$F(s, s') = \gamma \Phi(s') - \Phi(s)$$
    with $\Phi(s_{\text{terminal}}) = 0$, combined with an explicit per-step time penalty ($-0.05$). Over any trajectory, the shaped reward component telescopes:
    $$\sum_{t=0}^{T} F(s_t, s_{t+1}) = -\Phi(s_0) \le 0$$
-   This mathematically proves that no infinite reward farming is possible while preserving policy invariance.
+   This telescoping property prevents unbounded reward farming while preserving policy invariance.
 
 | Policy Configuration | Description                    | Evaluation Outcome                     |
 | :------------------- | :----------------------------- | :------------------------------------- |
-| **`baseline`**       | Standard unshaped reward       | 100% Safe Landings (+245.3 Avg Return) |
-| **`hover_hack`**     | Upright bonus exploit          | Perpetual Hovering, Never Lands        |
-| **`fixed`**          | Potential-Based Shaping (PBRS) | Fast, fuel-efficient safe touchdown    |
-| **`random`**         | Untrained stochastic policy    | Immediate crash / tumble               |
+| **`baseline`**       | Standard, unshaped reward      | 100% safe landings (+245.3 average return) |
+| **`hover_hack`**     | Upright-bonus exploit          | Hovers indefinitely and never lands     |
+| **`fixed`**          | Potential-based shaping (PBRS) | Fast, fuel-efficient safe touchdown     |
+| **`random`**         | Untrained stochastic policy    | Immediate crash or tumble               |
 
 ---
 
