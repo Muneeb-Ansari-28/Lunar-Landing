@@ -6,9 +6,9 @@
 [![Pygame-CE](https://img.shields.io/badge/Pygame--CE-v2.5%2B-brightgreen.svg)](https://pyga.me/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
-This end-to-end Reinforcement Learning project examines **reward shaping** and **reward hacking** in Gymnasium's Box2D `LunarLander-v3`. It includes a custom high-definition aerospace simulator, pre-trained PPO agents, and an interactive desktop flight console.
+This end-to-end Reinforcement Learning project explores **reward shaping** and **reward hacking** in Gymnasium's Box2D `LunarLander-v3`. Alongside the learning experiments, it provides a custom high-definition aerospace simulator, pre-trained PPO agents, and an interactive desktop flight console.
 
-Reproducible experiments and live visualizations work together here, making it possible to study reward-design trade-offs through both metrics and flight behavior.
+Reproducible experiments and live visualizations make the reward-design trade-offs visible in both quantitative metrics and observed flight behavior.
 
 ---
 
