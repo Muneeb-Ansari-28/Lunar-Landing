@@ -79,7 +79,7 @@ The custom Pygame-CE renderer provides:
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Get Started Quickly
 
 ### 1. Clone the project
 
@@ -88,7 +88,7 @@ git clone https://github.com/Muneeb-Ansari-28/Lunar-Landing.git
 cd Lunar-Landing
 ```
 
-### 2. Install the dependencies
+### 2. Set up the dependencies
 
 ```bash
 # Python 3.10 or newer is recommended
@@ -96,7 +96,7 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-### 3. Start the interactive console
+### 3. Launch the interactive console
 
 On Windows:
 
@@ -110,7 +110,7 @@ Or directly with Python:
 python main.py
 ```
 
-### Useful CLI commands
+### Useful command-line examples
 
 ```bash
 # Start a high-altitude orbital descent:
@@ -160,9 +160,9 @@ Lunar_Landing/
 
 ---
 
-## 🧪 Verification and Invariant Testing
+## 🧪 Verification and Invariant Checks
 
-The test suite includes unit and invariant property-based checks for algebraic bounds and environment stability:
+The test suite combines unit tests with invariant property-based checks for algebraic bounds and environment stability:
 
 ```bash
 pytest tests/ -v
