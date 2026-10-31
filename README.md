@@ -28,15 +28,15 @@ The agent performs an autonomous deceleration burn and precise touchdown while t
 
 ## 🧠 Reward Design and the "Hover Hack"
 
-An RL agent optimizes the mathematical signal it receives, which can lead to clever but unintended strategies:
+An RL agent optimizes the numerical signal it receives, so a seemingly helpful reward can produce clever but unintended behavior:
 
 1. **The Core Task:**
    The agent receives an 8-dimensional state vector containing position, velocity, angle, angular velocity, and leg-contact signals. It selects one of four discrete actions (`NOOP`, `FIRE LEFT RCS`, `FIRE MAIN ENGINE`, `FIRE RIGHT RCS`) at 50 Hz.
 
 2. **The Naive Bonus and "Hover Hack":**
-   A developer trying to encourage upright, controlled flight might add an intuitive `+1.0` bonus for every frame in which the lander is vertical and moving slowly:
+   To encourage upright, controlled flight, a developer might add an intuitive `+1.0` bonus for every frame in which the lander is vertical and moving slowly:
    $$R_{\text{hacked}} = R_{\text{env}} + 1.0 \quad \text{if } |x| < 0.2 \text{ and } |\theta| < 0.1$$
-   **The result:** Landing ends the episode and stops the bonus. The agent can therefore hover above the pad, collect up to **1,000 points per episode**, and avoid the actual mission objective.
+   **The result:** Because landing ends the episode and stops the bonus, the agent can hover above the pad, collect up to **1,000 points per episode**, and avoid the actual mission objective.
 
 3. **The Solution: Potential-Based Reward Shaping (PBRS):**
    To avoid distorting the policy, the project implements Ng, Harada, and Russell's (1999) potential-based reward-shaping theorem:
