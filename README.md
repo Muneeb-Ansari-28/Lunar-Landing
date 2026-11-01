@@ -28,7 +28,7 @@ The agent performs an autonomous deceleration burn and precise touchdown while t
 
 ## 🧠 Reward Design and the "Hover Hack"
 
-An RL agent optimizes the numerical signal it receives, so a seemingly helpful reward can produce clever but unintended behavior:
+An RL agent optimizes the numerical signal it receives, so a seemingly helpful reward can produce unintended, clever behavior:
 
 1. **The Core Task:**
    The agent receives an 8-dimensional state vector containing position, velocity, angle, angular velocity, and leg-contact signals. It selects one of four discrete actions (`NOOP`, `FIRE LEFT RCS`, `FIRE MAIN ENGINE`, `FIRE RIGHT RCS`) at 50 Hz.
