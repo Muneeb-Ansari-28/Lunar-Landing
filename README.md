@@ -59,12 +59,12 @@ An RL agent optimizes the numerical signal it receives, so a seemingly helpful r
 The custom Pygame-CE renderer provides:
 
 - **Dual-layer additive supersonic plume:** Mach shock diamonds and turbulent plasma tendrils rendered with `BLEND_RGBA_ADD` and dynamic flicker.
-- **Accurate nozzle alignment:** The exhaust root begins inside the engine bell without a detached air gap.
-- **Cold-gas RCS thrusters:** Directional hypergolic/nitrogen vapor jets emit from the cabin quads.
+- **Accurate nozzle alignment:** The exhaust root originates inside the engine bell without a detached air gap.
+- **Cold-gas RCS thrusters:** Directional hypergolic/nitrogen vapor jets expel from the cabin quads.
 - **Photorealistic lunar regolith:** A high-resolution surface uses Lambertian directional lighting derived from the sun vector.
 - **High-tech landing platform:** The platform includes a machined carbon-titanium foundation, hazard chevrons, crosshair reticle, runway LEDs, and strobe beacons.
-- **Dynamic ground lighting and dust ejecta:** Engine spotlights illuminate the regolith while horizontal dust rays respond to flight.
-- **Glass-cockpit telemetry HUD:** The HUD shows altitude, sink-rate safety, pitch attitude, contact sensors, and score in real time.
+- **Dynamic ground lighting and dust ejecta:** Engine spotlights illuminate the regolith while horizontal dust rays respond to flight dynamics.
+- **Glass-cockpit telemetry HUD:** The HUD displays altitude, sink-rate safety, pitch attitude, contact sensors, and score in real time.
 
 ### Simulator Hotkeys:
 
