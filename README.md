@@ -79,16 +79,16 @@ The custom Pygame-CE renderer provides:
 
 ---
 
-## ⚡ Get Started Quickly
+## ⚡ Quick Start
 
-### 1. Clone the project
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/Muneeb-Ansari-28/Lunar-Landing.git
 cd Lunar-Landing
 ```
 
-### 2. Set up the dependencies
+### 2. Install dependencies
 
 ```bash
 # Python 3.10 or newer is recommended
