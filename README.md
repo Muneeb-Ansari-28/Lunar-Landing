@@ -6,22 +6,24 @@
 [![Pygame-CE](https://img.shields.io/badge/Pygame--CE-v2.5%2B-brightgreen.svg)](https://pyga.me/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
-This end-to-end Reinforcement Learning project investigates **reward shaping** and **reward hacking** within Gymnasium's Box2D `LunarLander-v3` environment. Beyond the learning experiments, it offers a custom high-definition aerospace simulator, pre-trained PPO agents, and an interactive desktop flight console.
+An end-to-end Reinforcement Learning laboratory exploring **reward shaping**, **reward hacking**, and **policy invariance** inside Gymnasium's classic Box2D `LunarLander-v3` environment. Combining rigorous theoretical formulation with an aerospace-grade interactive simulator, this project demonstrates how subtle reward engineering decisions dictate agent autonomy—from catastrophic reward exploitation to optimal precision landings.
 
-Reproducible experiments and live visualizations expose the reward-design trade-offs through both quantitative metrics and observed flight behavior.
+### Key Highlights
+- **Mathematical Rigor:** Demonstrates how naive heuristic bonuses induce reward gaming ("Hover Hack") and resolves it via Ng et al.'s (1999) Potential-Based Reward Shaping (PBRS) theorem.
+- **High-Definition Aerospace Engine:** Custom Pygame-CE renderer featuring dual-pass additive rocket plumes, cold-gas RCS verniers, Lambertian surface lighting, and dynamic regolith dust ejecta.
+- **Extended Altitude Envelope:** Supports both standard insertion ($y \approx 13\,\text{m}$) and realistic orbital trajectory descent ($y \approx 20\,\text{m}$, 550+ flight steps).
+- **Interactive Flight Deck:** Live desktop console with hotkey-driven model swapping, telemetry HUD, warp-speed toggles, and instant state resets.
 
 ---
 
 ## 📸 Simulation Showcase
 
-### 1. High-Altitude Orbital Descent
-
-The spacecraft begins from high orbit ($y \approx 20\,\text{m}$), uses retrograde burns to reduce its velocity, and corrects horizontal drift against an expansive cosmic backdrop:
+### 1. High-Altitude Orbital Insertion Descent
+The lander enters from an extended suborbital trajectory ($y \approx 20\,\text{m}$), actively countering severe transverse velocity, calculating retrograde deceleration burns, and managing descent rates against a deep-space vista:
 ![High Altitude Orbital Descent](figures/high_orbit_snap.png)
 
-### 2. Precision Touchdown at Pad `LZ-1 ALPHA`
-
-The agent performs an autonomous deceleration burn and precise touchdown while the simulator displays locked landing gear, approach-runway LEDs, and flight telemetry:
+### 2. Autonomous Precision Touchdown at `LZ-1 ALPHA`
+Terminal deceleration phase with locked landing struts, active approach runway beacons, and zeroed ground-relative velocity directly atop the target landing pad:
 ![Touchdown](figures/live_snap_touchdown.png)
 
 ---
