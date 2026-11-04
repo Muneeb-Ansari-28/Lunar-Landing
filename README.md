@@ -69,74 +69,75 @@ Because the telescoping sum depends solely on the initial state and is strictly 
 
 ## 🎮 Interactive Desktop Flight Simulator
 
-The custom Pygame-CE renderer provides:
+The simulation is powered by a high-performance **Pygame-CE** graphics pipeline rendering physics and telemetry at 60 FPS:
 
-- **Dual-layer additive supersonic plume:** Mach shock diamonds and turbulent plasma tendrils rendered with `BLEND_RGBA_ADD` and dynamic flicker.
-- **Accurate nozzle alignment:** The exhaust root originates inside the engine bell without a detached air gap.
-- **Cold-gas RCS thrusters:** Directional hypergolic/nitrogen vapor jets expel from the cabin quads.
-- **Photorealistic lunar regolith:** A high-resolution surface uses Lambertian directional lighting derived from the sun vector.
-- **High-tech landing platform:** The platform includes a machined carbon-titanium foundation, hazard chevrons, crosshair reticle, runway LEDs, and strobe beacons.
-- **Dynamic ground lighting and dust ejecta:** Engine spotlights illuminate the regolith while horizontal dust rays respond to flight dynamics.
-- **Glass-cockpit telemetry HUD:** The HUD displays altitude, sink-rate safety, pitch attitude, contact sensors, and score in real time.
+- **Dual-Pass Additive Supersonic Plumes:** Composites Mach shock diamonds with high-frequency plasma exhaust using `BLEND_RGBA_ADD` and stochastic throttle turbulence.
+- **Precision Nozzle Seating:** Exhaust geometry originates directly inside the rocket nozzle bell with zero detached displacement during dynamic pitching.
+- **Directional Cold-Gas RCS Verniers:** Translates discrete attitude thrusts into hypergolic nitrogen vapor jets emitting from cabin reaction control quads.
+- **Lambertian Solar Illumination:** High-resolution lunar regolith texture mapped with solar zenith lighting vectors and procedural crater micro-shadows.
+- **High-Tech Landing Zone (`LZ-1 ALPHA`):** Heavy-duty carbon-titanium touchdown pad equipped with hazard boundary chevrons, guidance reticles, sequential approach LEDs, and flashing warning beacons.
+- **Dynamic Terrain Irradiation & Dust Ejecta:** Engine thrust dynamically casts an inverse-square spotlight onto the terrain below while generating horizontal regolith dust particles upon ground proximity.
+- **Apollo Telemetry Glass Cockpit:** Real-time HUD displaying radar altitude, sink-rate safety thresholds, pitch attitude angle, strut contact sensors, and cumulative mission reward.
 
-### Simulator Hotkeys:
+### Cockpit Flight Controls & Hotkeys
 
-|       Key       | Action                                                                             |
-| :-------------: | :--------------------------------------------------------------------------------- |
-|  **`[SPACE]`**  | Pause or resume the real-time simulation                                          |
-|    **`[R]`**    | Restart or reset the current landing attempt                                      |
-|    **`[A]`**    | **Toggle altitude profile** (high orbit $20\,\text{m}$ or standard $13\,\text{m}$) |
-|    **`[C]`**    | **Cycle policy** (`baseline` $\to$ `hover_hack` $\to$ `fixed` $\to$ `random`)     |
-|   **`[1-4]`**   | Set the warp-speed factor ($0.5\times$, $1.0\times$, $2.0\times$, $4.0\times$)    |
-| **`[ESC / Q]`** | Exit the viewer and return to the launcher menu                                   |
+| Key Binding | Function | Operational Description |
+| :---: | :--- | :--- |
+| **`[SPACE]`** | **Pause / Resume** | Freeze simulation state to inspect instantaneous dynamics or attitude |
+| **`[R]`** | **State Reset** | Instantly reseed the environment and restart descent from orbit |
+| **`[A]`** | **Toggle Altitude Envelope** | Switch between High Orbital Insertion ($y \approx 20\,\text{m}$) and Standard Approach ($y \approx 13\,\text{m}$) |
+| **`[C]`** | **Cycle Neural Policy** | Swap live policy in memory (`baseline` $\to$ `hover_hack` $\to$ `fixed` $\to$ `random`) |
+| **`[1-4]`** | **Warp Speed Multiplier** | Adjust simulation rate ($0.5\times$ slow-motion, $1.0\times$ real-time, $2.0\times$, $4.0\times$ fast-forward) |
+| **`[ESC / Q]`** | **Exit Console** | Safely shut down graphics context and return to the main menu |
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Quick Start & CLI Workflows
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/Muneeb-Ansari-28/Lunar-Landing.git
 cd Lunar-Landing
 ```
 
-### 2. Install dependencies
+### 2. Environment Setup
 
 ```bash
-# Python 3.10 or newer is recommended
+# Python 3.10+ recommended
 pip install -r requirements.txt
 pip install -e .
 ```
 
-### 3. Launch the interactive console
+### 3. Launch the Interactive Flight Console
 
-On Windows:
-
+**On Windows (PowerShell):**
 ```powershell
 .\run.ps1
 ```
 
-Or directly with Python:
-
+**Cross-Platform (CLI Launcher):**
 ```bash
 python main.py
 ```
 
-### Useful command-line examples
+### Advanced Command-Line Workflows
 
 ```bash
-# Start a high-altitude orbital descent:
+# 1. High-Altitude Orbital Insertion with Pre-Trained Baseline Policy:
 python -m ll.live_viewer --config baseline --altitude high
 
-# Observe the hover-hack policy:
+# 2. Observe the Pathological Hover-Hack Phenomenon:
 python -m ll.live_viewer --config hover_hack
 
-# Run a random-policy crash test:
+# 3. Test Untrained Random Policy:
 python -m ll.live_viewer --config random
 
-# Run the unit and property tests:
-pytest tests/ -v
+# 4. Train a New PPO Policy from Scratch (e.g., fixed PBRS reward):
+python -m ll.train --reward fixed --timesteps 300000
+
+# 5. Evaluate Policy Across 50 Quantitative Benchmark Episodes:
+python -m ll.evaluate --policy-path runs/baseline/model.zip --episodes 50
 ```
 
 ---
