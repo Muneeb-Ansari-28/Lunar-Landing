@@ -28,31 +28,42 @@ Terminal deceleration phase with locked landing struts, active approach runway b
 
 ---
 
-## 🧠 Reward Design and the "Hover Hack"
+## 🧠 Reward Engineering & Policy Invariance: The "Hover Hack"
 
-An RL agent optimizes the numerical signal it receives, so a seemingly helpful reward can produce unintended, clever behavior:
+Reinforcement Learning agents strictly maximize the cumulative scalar reward provided by the environment. When reward signals are hand-tuned without theoretical guarantees, agents frequently discover high-scoring degenerate behaviors that violate human design intent.
 
-1. **The Core Task:**
-   The agent receives an 8-dimensional state vector containing position, velocity, angle, angular velocity, and leg-contact signals. It selects one of four discrete actions (`NOOP`, `FIRE LEFT RCS`, `FIRE MAIN ENGINE`, `FIRE RIGHT RCS`) at 50 Hz.
+### 1. Markov Decision Process Formulation
+- **State Space $\mathcal{S} \subset \mathbb{R}^8$:** Observation vector tracking horizontal and vertical coordinates $(x, y)$, linear velocity vectors $(v_x, v_y)$, angular orientation $\theta$, angular velocity $\dot{\theta}$, and ground contact booleans for the left and right landing legs.
+- **Action Space $\mathcal{A} = \{0, 1, 2, 3\}$:** Discrete propulsion control executed at 50 Hz:
+  - `0`: Idle (`NOOP` - free ballistic fall)
+  - `1`: Fire Left Vernier RCS (induces clockwise torque)
+  - `2`: Fire Main Descent Engine (produces primary axial thrust)
+  - `3`: Fire Right Vernier RCS (induces counter-clockwise torque)
 
-2. **The Naive Bonus and "Hover Hack":**
-   To encourage upright, controlled flight, a developer might add an intuitive `+1.0` bonus for every frame in which the lander is vertical and moving slowly:
-   $$R_{\text{hacked}} = R_{\text{env}} + 1.0 \quad \text{if } |x| < 0.2 \text{ and } |\theta| < 0.1$$
-   **The result:** Because landing ends the episode and stops the bonus, the agent can hover above the pad, collect up to **1,000 points per episode**, and avoid the actual mission objective.
+### 2. Specification Gaming: The "Hover Hack"
+In an attempt to steer the lander toward an upright, stabilized orientation prior to ground contact, engineers often introduce a naive heuristic shaping bonus:
+$$R_{\text{hacked}}(s, a) = R_{\text{env}}(s, a) + 1.0 \quad \text{when } |x| < 0.2 \text{ and } |\theta| < 0.1$$
 
-3. **The Solution: Potential-Based Reward Shaping (PBRS):**
-   To avoid distorting the policy, the project implements Ng, Harada, and Russell's (1999) potential-based reward-shaping theorem:
-   $$F(s, s') = \gamma \Phi(s') - \Phi(s)$$
-   with $\Phi(s_{\text{terminal}}) = 0$, combined with an explicit per-step time penalty ($-0.05$). Over any trajectory, the shaped reward component telescopes:
-   $$\sum_{t=0}^{T} F(s_t, s_{t+1}) = -\Phi(s_0) \le 0$$
-   This telescoping property prevents unbounded reward farming while preserving policy invariance.
+**The Pathological Outcome:**
+Landing successfully terminates the episode with a $+100$ terminal bonus. However, remaining in a slow hover just 1 meter above the target pad generates $+1.0$ reward per timestep. Over a 1,000-step episode horizon, the agent earns up to **$+1,000$ points simply by never touching down**. The policy exploits the loop indefinitely, resulting in a 0% mission completion rate despite astronomical training rewards.
 
-| Policy Configuration | Description                    | Evaluation Outcome                     |
-| :------------------- | :----------------------------- | :------------------------------------- |
-| **`baseline`**       | Standard, unshaped reward      | 100% safe landings (+245.3 average return) |
-| **`hover_hack`**     | Upright-bonus exploit          | Hovers indefinitely and never lands     |
-| **`fixed`**          | Potential-based shaping (PBRS) | Fast, fuel-efficient safe touchdown     |
-| **`random`**         | Untrained stochastic policy    | Immediate crash or tumble               |
+### 3. The Theoretical Resolution: Potential-Based Reward Shaping (PBRS)
+To guarantee that the optimal policy set $\Pi^*$ remains completely identical to the true task objective, shaping rewards must take the form of a potential difference (Ng, Harada, & Russell, 1999):
+$$F(s, s') = \gamma \Phi(s') - \Phi(s)$$
+
+By enforcing the boundary condition $\Phi(s_{\text{terminal}}) = 0$ along with a nominal step duration penalty ($-0.05$), the cumulative shaping along any flight trajectory telescopes:
+$$\sum_{t=0}^{T} \gamma^t F(s_t, s_{t+1}) = -\Phi(s_0) \le 0$$
+
+Because the telescoping sum depends solely on the initial state and is strictly non-positive, closed-loop reward cycles are mathematically impossible. The agent cannot farm arbitrary reward and is driven to complete touchdown promptly and efficiently.
+
+### Empirical Policy Comparison
+
+| Policy Variant | Reward Formulation | Primary Behavior | Landing Success | Mean Episode Score |
+| :--- | :--- | :--- | :---: | :---: |
+| **`baseline`** | Standard Gymnasium sparse + dense | Conservative retrograde burn, smooth touchdown | **100%** | **+245.3** |
+| **`hover_hack`** | Environment + naive state bonus | Trapped in perpetual hover cycle above pad | **0%** | **+680.1 (Exploited)** |
+| **`fixed`** | Potential-Based Reward Shaping (PBRS) | Aggressive, fuel-efficient descent & touchdown | **100%** | **+238.9** |
+| **`random`** | Stochastic baseline (uniform action selection) | Uncontrolled tumble and high-velocity terrain impact | **0%** | **-412.5** |
 
 ---
 
