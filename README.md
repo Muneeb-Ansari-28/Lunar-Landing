@@ -60,10 +60,13 @@ Because the telescoping sum depends solely on the initial state and is strictly 
 
 | Policy Variant | Reward Formulation | Primary Behavior | Landing Success | Mean Episode Score |
 | :--- | :--- | :--- | :---: | :---: |
-| **`baseline`** | Standard Gymnasium sparse + dense | Conservative retrograde burn, smooth touchdown | **100%** | **+245.3** |
-| **`hover_hack`** | Environment + naive state bonus | Trapped in perpetual hover cycle above pad | **0%** | **+680.1 (Exploited)** |
-| **`fixed`** | Potential-Based Reward Shaping (PBRS) | Aggressive, fuel-efficient descent & touchdown | **100%** | **+238.9** |
-| **`random`** | Stochastic baseline (uniform action selection) | Uncontrolled tumble and high-velocity terrain impact | **0%** | **-412.5** |
+| **`baseline`** | Standard Gymnasium sparse + dense | Conservative retrograde burn, smooth touchdown | **90%** | **+229.2** |
+| **`hover_hack`** | Environment + naive state bonus | Crashes in most episodes; hover exploit not observed (100k-step smoke test) | **14%** | **-115.8** |
+| **`fixed`** | Potential-Based Reward Shaping (PBRS) | Crashes in 98% of episodes (100k-step smoke test; not trained to convergence) | **2%** | **-172.5** |
+| **`random`** | Stochastic baseline (uniform action selection) | Uncontrolled tumble and high-velocity terrain impact | **0%** | **-175.5** |
+| **`time_penalty`** | Standard + per-step time fee | Not yet trained — no result | — | — |
+
+Measured 2026-11-08: 50 episodes, deterministic policies, raw environment, seed-0 models. Baseline trained 500k steps; `hover_hack` and `fixed` are 100k-step smoke tests. Numbers will be re-measured after the full training runs.
 
 ---
 
@@ -134,10 +137,11 @@ python -m ll.live_viewer --config hover_hack
 python -m ll.live_viewer --config random
 
 # 4. Train a New PPO Policy from Scratch (e.g., fixed PBRS reward):
-python -m ll.train --reward fixed --timesteps 300000
+python -m ll.train --config fixed --timesteps 300000
 
-# 5. Evaluate Policy Across 50 Quantitative Benchmark Episodes:
-python -m ll.evaluate --policy-path runs/baseline/model.zip --episodes 50
+# 5. Evaluate Every Trained Policy Across 50 Benchmark Episodes Each:
+# (takes no arguments; evaluates all models in runs/*/seed*/ plus the random baseline)
+python -m ll.evaluate
 ```
 
 ---

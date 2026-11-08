@@ -3,7 +3,7 @@ from __future__ import annotations
 import glob
 import pathlib
 import numpy as np
-import imageio.v3 as iio
+import imageio.v2 as iio
 from stable_baselines3 import PPO
 from ll.envs import make_env, make_raw_env
 
@@ -40,17 +40,14 @@ def collect(
         stream_writer = None
         if ep == 0:
             raw_video_path = f"videos/raw_{config}_seed{seed}_ep0.mp4"
-            # Stream directly to disk
-            stream_writer = iio.imiter(raw_video_path, fps=50)
+            # Stream directly to disk (v2 writer: append_data + close)
+            stream_writer = iio.get_writer(raw_video_path, fps=50)
 
         done = False
         outcome = "unknown"
         while not done:
-            if ep == 0:
-                frame = env.render()
-                # ImageIO writer: frames are streamed one by one
-                # Note: we will use simple frame accumulation for small 1000-frame episode if stream writer
-                pass
+            if ep == 0 and stream_writer is not None:
+                stream_writer.append_data(env.render())
 
             action, _ = model.predict(obs, deterministic=True)
             action = int(action)
@@ -68,6 +65,9 @@ def collect(
             done = term or trunc
             if done:
                 outcome = info.get("ep_stats", {}).get("outcome", "unknown")
+
+        if stream_writer is not None:
+            stream_writer.close()
 
         env.close()
 

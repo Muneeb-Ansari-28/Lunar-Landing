@@ -103,8 +103,8 @@ def main_menu():
 
             print("\nSelect training duration:")
             print("  [1] Quick Smoke Test   (100,000 steps ~45s)   - Basic posture learning")
-            print("  [2] Standard Training  (500,000 steps ~3.5m)  - Safely lands on pad (Recommended)")
-            print("  [3] Full Paper Target  (1,000,000 steps ~7m)  - High-precision expert landings")
+            print("  [2] Standard Training  (500,000 steps ~7m)  - Safely lands on pad (Recommended)")
+            print("  [3] Full Paper Target  (1,000,000 steps ~14m)  - High-precision expert landings")
             dur_choice = input("Select duration [1-3] (default 2): ").strip()
 
             step_map = {"1": 100_000, "2": 500_000, "3": 1_000_000}
