@@ -1,5 +1,6 @@
 """Phase 7b: Video Processing, Annotation, Filmstrips, and Side-by-Side Compositing."""
 from __future__ import annotations
+import argparse
 import pathlib
 import imageio.v3 as iio
 import numpy as np
@@ -70,6 +71,66 @@ def create_filmstrip(frames: list[np.ndarray], n: int = 8, out_path: str | None 
     return grid_img
 
 
+def build_all(seed: int = 0, videos_dir: str | pathlib.Path = "videos"):
+    """Build the Phase 7c outputs from the streamed rollout videos.
+
+    Inputs (produced by ``python -m ll.rollouts`` and ``scripts/01_random_agent.py``):
+      videos/raw_{config}_seed{seed}_ep0.mp4   one streamed clip per trained config
+      videos/random_crash.mp4                 random-policy crash clip
+
+    Outputs:
+      videos/{config}_seed{seed}.gif            per-config GIF
+      videos/{config}_seed{seed}_filmstrip.png  per-config 8-frame filmstrip
+      videos/random_crash.gif                   random crash GIF (if the mp4 exists)
+      videos/comparison.mp4                     side-by-side of all raw clips
+
+    Missing inputs are skipped with a note, never an error, so the driver is
+    safe to run before every config has a rollout.
+    """
+    videos_dir = pathlib.Path(videos_dir)
+    raw_paths = sorted(videos_dir.glob(f"raw_*_seed{seed}_ep0.mp4"))
+
+    if not raw_paths:
+        print(f"No streamed rollout videos found in {videos_dir} (expected raw_*_seed{seed}_ep0.mp4).")
+        print("Run 'python -m ll.rollouts' first to collect them.")
+    for raw_path in raw_paths:
+        config = raw_path.name[len("raw_"):].split(f"_seed{seed}_ep0.mp4")[0]
+        frames = read_frames(raw_path)
+        gif_path = videos_dir / f"{config}_seed{seed}.gif"
+        print(f"Building {gif_path} ({len(frames)} frames)...")
+        write_gif(frames, gif_path)
+        filmstrip_path = videos_dir / f"{config}_seed{seed}_filmstrip.png"
+        print(f"Building {filmstrip_path}...")
+        create_filmstrip(frames, out_path=filmstrip_path)
+
+    random_mp4 = videos_dir / "random_crash.mp4"
+    if random_mp4.exists():
+        print(f"Building {videos_dir / 'random_crash.gif'}...")
+        write_gif(read_frames(random_mp4), videos_dir / "random_crash.gif")
+    else:
+        print(f"Skipping random_crash.gif: {random_mp4} not found (run scripts/01_random_agent.py).")
+
+    if len(raw_paths) >= 2:
+        labels = [
+            p.name[len("raw_"):].split(f"_seed{seed}_ep0.mp4")[0] for p in raw_paths
+        ]
+        side_by_side_video(
+            [str(p) for p in raw_paths],
+            labels,
+            str(videos_dir / "comparison.mp4"),
+        )
+    elif raw_paths:
+        print("Skipping comparison.mp4: need at least 2 raw videos for a side-by-side.")
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Build Phase 7c videos (GIFs, filmstrips, side-by-side) from streamed rollout clips.")
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--videos-dir", type=str, default="videos")
+    a = ap.parse_args()
+    build_all(seed=a.seed, videos_dir=a.videos_dir)
+
+
 def side_by_side_video(
     video_paths: list[str],
     labels: list[str],
@@ -108,3 +169,7 @@ def side_by_side_video(
     iio.imwrite(out_path, composite_frames, fps=fps)
     print(f"Side-by-side comparison video saved to {out_path} ({len(composite_frames)} frames).")
 
+
+
+if __name__ == "__main__":
+    main()

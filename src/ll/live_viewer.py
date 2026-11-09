@@ -38,7 +38,12 @@ def run_viewer(
             return None
         if cfg in loaded_models:
             return loaded_models[cfg]
-        p = pathlib.Path(f"runs/{cfg}/seed{seed}/model.zip")
+        # An explicit --model path wins for the config the viewer started with;
+        # cycling to another policy falls back to that config's default path.
+        if model_path and cfg == current_config:
+            p = pathlib.Path(model_path)
+        else:
+            p = pathlib.Path(f"runs/{cfg}/seed{seed}/model.zip")
         if p.exists():
             print(f">>> Loading model for {cfg} from {p}...")
             m = PPO.load(str(p), device="cpu")
@@ -46,6 +51,7 @@ def run_viewer(
             return m
         else:
             print(f"\n[INFO] Model checkpoint for '{cfg}' not found at {p}.")
+            print(f"       Train it with: python -m ll.train --config {cfg} --seed {seed}")
             print("Falling back to random actions until model is trained.")
             return None
 

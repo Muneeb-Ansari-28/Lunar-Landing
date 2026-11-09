@@ -1,4 +1,4 @@
-.PHONY: setup check explore test train-quick train evaluate rollouts plots report viewer first-run all
+.PHONY: setup check explore test train-quick train evaluate rollouts videos plots report viewer first-run all
 
 setup:
 	pip install -r requirements.txt
@@ -29,6 +29,9 @@ evaluate:
 
 rollouts:
 	python -m ll.rollouts
+
+videos:
+	python -m ll.video
 
 plots:
 	python -m ll.plots
