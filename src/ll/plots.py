@@ -131,24 +131,54 @@ def fig05_eval_return_box():
 
 
 def fig12_fixed_bonus_bounded():
+    """Cumulative shaping bonus per frame, measured from rollout .npz files.
+
+    For each of hover_hack and fixed, plots every collected episode's
+    cumulative `bonus` (thin lines) plus the mean across episodes (thick
+    line). The dashed line is the analytic bound for `fixed`, derived from
+    ll/envs.py: the niceness potential Φ lies in [0, 2], so the telescoped
+    potential sum over an episode is at most γ·2, and the cumulative bonus
+    (potential sum minus the per-frame time fee) is at most γ·2 − 0.05·frame.
+    If no rollout data exists, the figure is skipped instead of drawn from
+    invented curves — run `python -m ll.rollouts` first.
+    """
     p = pathlib.Path("figures")
     p.mkdir(parents=True, exist_ok=True)
-    # Proof plot of telescoping sum
+
+    data = {}
+    for cfg in ("hover_hack", "fixed"):
+        curves = []
+        for f in sorted(glob.glob(f"results/rollouts/{cfg}_seed*_ep*.npz")):
+            d = np.load(f)
+            curves.append(np.cumsum(d["bonus"]))
+        if curves:
+            data[cfg] = curves
+
+    if not data:
+        print("Skipping Figure 12: no results/rollouts/{hover_hack,fixed}_seed*_ep*.npz found.")
+        print("Run `python -m ll.rollouts` first to collect rollout data.")
+        return
+
     plt.figure(figsize=(9, 5), dpi=160)
-    frames = np.arange(0, 1000)
-    # Hover hack farms ~1 point per frame
-    hack_cum_bonus = np.minimum(frames * 0.95, 950)
-    # Fixed potential-based shaping is bounded <= 0
-    gamma = 0.999
-    time_fee = 0.05
-    fixed_pot_component = np.sin(frames / 50.0) * 0.1 - 0.2  # always <= 0
-    fixed_total_bonus = fixed_pot_component - (frames * time_fee)
+    max_len = 0
+    for cfg, curves in data.items():
+        color = COLORS.get(cfg, "blue")
+        for c in curves:
+            plt.plot(np.arange(len(c)), c, color=color, lw=0.8, alpha=0.35)
+        # Mean across episodes still running at each frame.
+        n = max(len(c) for c in curves)
+        mean = np.array([np.mean([c[t] for c in curves if len(c) > t]) for t in range(n)])
+        plt.plot(np.arange(n), mean, color=color, lw=2.5,
+                 label=f"{cfg}: mean cumulative bonus ({len(curves)} episodes)")
+        max_len = max(max_len, n)
 
-    plt.plot(frames, hack_cum_bonus, color="red", lw=2, label="hover_hack: Farming Unconstrained Bonus (~1000 pts)")
-    plt.plot(frames, fixed_pot_component, color="blue", linestyle=":", lw=2, label="fixed: Potential Component (Bounded <= 0)")
-    plt.plot(frames, fixed_total_bonus, color="green", lw=2, label="fixed: Net Bonus (Potential - Time Fee <= -50 pts)")
+    # Analytic upper bound for `fixed` (envs.py defaults: gamma=0.999,
+    # time_fee=0.05, niceness potential Φ in [0, 2]).
+    frames = np.arange(0, max_len)
+    plt.plot(frames, 0.999 * 2.0 - 0.05 * frames, color="black", linestyle="--", lw=1.5,
+             label="fixed: theoretical bound (γ·2 − 0.05·frame)")
 
-    plt.title("Mathematical Proof: Potential-Based Bonus Cannot Be Farmed by Hovering")
+    plt.title("Measured Cumulative Shaping Bonus per Episode (Rollout Data)")
     plt.xlabel("Episode Frames")
     plt.ylabel("Cumulative Bonus Received")
     plt.axhline(0, color="black", linestyle="--", alpha=0.5)
@@ -157,6 +187,7 @@ def fig12_fixed_bonus_bounded():
     plt.tight_layout()
     plt.savefig("figures/12_fixed_bonus_bounded.png")
     plt.close()
+    print(f"Figure 12: plotted { {cfg: len(c) for cfg, c in data.items()} } from rollout data.")
 
 
 def make_all():
