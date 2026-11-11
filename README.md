@@ -66,7 +66,7 @@ Because the telescoping sum depends solely on the initial state and is strictly 
 | **`random`** | Stochastic baseline (uniform action selection) | Uncontrolled tumble and high-velocity terrain impact | **0%** | **-175.5** |
 | **`time_penalty`** | Standard + per-step time fee | Not yet trained — no result | — | — |
 
-Measured 2026-11-08: 50 episodes, deterministic policies, raw environment, seed-0 models. Baseline trained 500k steps; `hover_hack` and `fixed` are 100k-step smoke tests. Numbers will be re-measured after the full training runs.
+Measured 2026-11-08, re-confirmed 2026-11-11 with identical numbers: 50 episodes, deterministic policies, raw environment, seed-0 models. Baseline trained 500k steps; `hover_hack` and `fixed` are 100k-step smoke tests. Source data: `results/eval.csv`. Numbers will be re-measured after the full training runs.
 
 ---
 
