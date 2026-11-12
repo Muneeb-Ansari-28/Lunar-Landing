@@ -4,6 +4,24 @@ import pathlib
 import pandas as pd
 
 
+def media_tag(html_path: str, alt: str, is_video: bool = False) -> str:
+    """Embed a media file only if it exists; otherwise show how to generate it.
+
+    ``html_path`` is relative to ``report/index.html`` (e.g. ``../videos/x.gif``).
+    A missing file used to render as a broken image/video tag with no hint.
+    """
+    fs_path = pathlib.Path("report") / html_path
+    if fs_path.exists():
+        if is_video:
+            return f'<video controls src="{html_path}" width="100%"></video>'
+        return f'<img src="{html_path}" alt="{alt}">'
+    return (
+        f"<p><em>Media not yet generated: <code>{html_path}</code> — "
+        f"run <code>python -m ll.rollouts && python -m ll.video</code> "
+        f"and <code>python scripts/01_random_agent.py</code> to create it.</em></p>"
+    )
+
+
 def build_report():
     out_dir = pathlib.Path("report")
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -19,6 +37,13 @@ def build_report():
     if explainer_path.exists():
         df_exp = pd.read_csv(explainer_path)
         explainer_html = df_exp.head(8).to_html(classes="table-explainer", index=False)
+
+    random_crash_html = media_tag("../videos/random_crash.gif", "Random Crash")
+    viewer_demo_html = media_tag("../videos/viewer_demo.mp4", "Live Viewer Demo", is_video=True)
+    comparison_html = media_tag("../videos/comparison.mp4", "Side-by-Side Comparison", is_video=True)
+    baseline_gif_html = media_tag("../videos/baseline_seed0.gif", "Baseline Landing")
+    fixed_gif_html = media_tag("../videos/fixed_seed0.gif", "Fixed Policy")
+    hover_gif_html = media_tag("../videos/hover_hack_seed0.gif", "Hover Hack Policy")
 
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -141,7 +166,7 @@ def build_report():
         <h3>Two-Frame Step Reward Verification</h3>
         <p>Verification showing that built-in reward matches delta position score minus engine fuel cost:</p>
         {explainer_html}
-        <img src="../videos/random_crash.gif" alt="Random Crash">
+        {random_crash_html}
     </div>
 
     <div class="card">
@@ -157,13 +182,29 @@ def build_report():
             </div>
         </div>
         <img src="../figures/12_fixed_bonus_bounded.png" alt="Mathematical Proof of Bounded Bonus">
+        <h3>Rollout Clips (seed 0, episode 0)</h3>
+        <p>One episode per policy, recorded from the real environment. Only the baseline is trained enough to land — the fixed and hover_hack models are 100k-step smoke tests and crash in these clips, which is why the hover exploit is not visible yet.</p>
+        <div class="grid">
+            <div>
+                <h3>Baseline — landed</h3>
+                {baseline_gif_html}
+            </div>
+            <div>
+                <h3>Fixed — crashed (100k steps)</h3>
+                {fixed_gif_html}
+            </div>
+        </div>
+        <h3>Hover Hack — crashed (100k steps, no hover yet)</h3>
+        {hover_gif_html}
+        <h3>Side-by-Side Comparison</h3>
+        {comparison_html}
     </div>
 
     <div class="card">
         <h2>4. Interactive Live Viewer</h2>
         <p>A real-time desktop viewer built in Pygame-CE driven by the real Gymnasium Box2D physics and the policy's deterministic predictions:</p>
         <pre><code>python -m ll.live_viewer --config baseline --seed 0</code></pre>
-        <video controls src="../videos/viewer_demo.mp4" width="100%"></video>
+        {viewer_demo_html}
     </div>
 
     <div class="card">
