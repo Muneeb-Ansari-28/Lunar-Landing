@@ -2,11 +2,15 @@
 
 Replays checkpoints saved across training milestones (10%, 25%, 50%, 100%)
 under the identical evaluation seed on the raw environment.
+
+Frames are streamed to disk as they are rendered (imageio v2 writer) instead
+of being accumulated in RAM — a full evolution video at 1280x720 would
+otherwise be tens of GB in memory.
 """
 from __future__ import annotations
 import glob
 import pathlib
-import imageio.v3 as iio
+import imageio.v2 as iio
 from stable_baselines3 import PPO
 from ll.envs import make_raw_env
 from ll.renderer import LunarRenderer
@@ -31,47 +35,53 @@ def generate_evolution_video(
 
     print(f"Found {len(cp_files)} checkpoints to evaluate for evolution video.")
     renderer = LunarRenderer(width=1280, height=720, headless=True)
-    all_frames = []
+    pathlib.Path(out_video).parent.mkdir(parents=True, exist_ok=True)
+    print(f"Saving evolution video to {out_video} (streaming frames to disk)...")
+    stream_writer = iio.get_writer(out_video, fps=50)
+    total_frames = 0
 
-    for idx, cp in enumerate(cp_files):
-        print(f"Replaying milestone {idx + 1}/{len(cp_files)}: {cp}...")
-        model = PPO.load(cp, device="cpu")
-        env = make_raw_env()
-        obs, _ = env.reset(seed=eval_seed)
-        done = False
-        frame_idx = 0
-        raw_ret = 0.0
+    try:
+        for idx, cp in enumerate(cp_files):
+            print(f"Replaying milestone {idx + 1}/{len(cp_files)}: {cp}...")
+            model = PPO.load(cp, device="cpu")
+            env = make_raw_env()
+            obs, _ = env.reset(seed=eval_seed)
+            done = False
+            frame_idx = 0
+            raw_ret = 0.0
 
-        while not done and frame_idx < 800:
-            action, _ = model.predict(obs, deterministic=True)
-            action = int(action)
-            obs, reward, term, trunc, _ = env.step(action)
-            raw_ret += reward
-            frame_idx += 1
-            done = term or trunc
+            while not done and frame_idx < 800:
+                action, _ = model.predict(obs, deterministic=True)
+                action = int(action)
+                obs, reward, term, trunc, _ = env.step(action)
+                raw_ret += reward
+                frame_idx += 1
+                done = term or trunc
 
-            frame = renderer.render_frame(
-                env=env,
-                obs=obs,
-                action=action,
-                config=config,
-                seed=seed,
-                frame_idx=frame_idx,
-                raw_ret=raw_ret,
-                shaped_ret=raw_ret,
-                outcome="landed" if (done and reward >= 99) else ("crashed" if (done and reward <= -99) else None),
-            )
-            all_frames.append(frame)
+                frame = renderer.render_frame(
+                    env=env,
+                    obs=obs,
+                    action=action,
+                    config=config,
+                    seed=seed,
+                    frame_idx=frame_idx,
+                    raw_ret=raw_ret,
+                    shaped_ret=raw_ret,
+                    outcome="landed" if (done and reward >= 99) else ("crashed" if (done and reward <= -99) else None),
+                )
+                stream_writer.append_data(frame)
+                total_frames += 1
 
-        env.close()
+            env.close()
+    finally:
+        stream_writer.close()
 
     renderer.close()
 
-    if all_frames:
-        pathlib.Path(out_video).parent.mkdir(parents=True, exist_ok=True)
-        print(f"Saving evolution video to {out_video} ({len(all_frames)} frames)...")
-        iio.imwrite(out_video, all_frames, fps=50)
-        print("Evolution video complete.")
+    if total_frames:
+        print(f"Evolution video complete ({total_frames} frames).")
+    else:
+        print("No frames recorded.")
 
 
 if __name__ == "__main__":

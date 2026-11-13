@@ -19,9 +19,8 @@ env.bak/
 venv.bak/
 *.log
 
-# Training logs & intermediate checkpoints (keep final model.zip & progress.csv)
+# Training logs (keep final model.zip, progress.csv & checkpoints for evolution)
 runs/**/tb/
-runs/**/checkpoints/
 events.out.tfevents.*
 
 # Archives & Temporary files
