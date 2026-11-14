@@ -8,7 +8,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 import time
-import imageio.v3 as iio
+import imageio.v2 as iio
 import numpy as np
 import pygame
 from stable_baselines3 import PPO
@@ -58,7 +58,12 @@ def run_viewer(
     model = get_model(current_config)
 
     renderer = LunarRenderer(width=1280, height=720, headless=headless)
-    recorded_frames = []
+    # --record streams frames straight to disk (imageio v2 writer), so a long
+    # recording never accumulates in RAM the way the old recorded_frames list did.
+    # The writer opens lazily on the first frame, so no file is created if
+    # zero frames are recorded.
+    stream_writer = None
+    n_recorded = 0
 
     clock = pygame.time.Clock()
     target_fps = int(50 * speed)
@@ -195,7 +200,12 @@ def run_viewer(
             )
 
             if record_path:
-                recorded_frames.append(frame)
+                if stream_writer is None:
+                    pathlib.Path(record_path).parent.mkdir(parents=True, exist_ok=True)
+                    print(f"Recording video to {record_path} (streaming frames to disk)...")
+                    stream_writer = iio.get_writer(record_path, fps=50)
+                stream_writer.append_data(frame)
+                n_recorded += 1
 
             if not headless:
                 clock.tick(target_fps)
@@ -235,11 +245,9 @@ def run_viewer(
 
     renderer.close()
 
-    if record_path and recorded_frames:
-        pathlib.Path(record_path).parent.mkdir(parents=True, exist_ok=True)
-        print(f"Saving recorded video to {record_path} ({len(recorded_frames)} frames)...")
-        iio.imwrite(record_path, recorded_frames, fps=50)
-        print("Saved successfully.")
+    if stream_writer is not None:
+        stream_writer.close()
+        print(f"Saved recorded video to {record_path} ({n_recorded} frames).")
 
 
 def main():

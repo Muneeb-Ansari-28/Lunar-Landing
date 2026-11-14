@@ -9,26 +9,27 @@ description = "Lunar Lander Reward-Shaping & Live Physics Simulation"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
-    "gymnasium[box2d]>=1.0.0",
-    "stable-baselines3>=2.3.0",
-    "torch>=2.0.0",
-    "numpy>=1.24.0",
-    "pandas>=2.0.0",
-    "matplotlib>=3.7.0",
-    "imageio>=2.30.0",
-    "imageio-ffmpeg>=0.4.8",
-    "pillow>=10.0.0",
-    "pygame-ce>=2.4.0",
-    "tensorboard>=2.14.0",
-    "tqdm>=4.65.0",
-    "pytest>=7.4.0",
-    "hypothesis>=6.80.0",
+    "gymnasium[box2d]==1.4.0",
+    "Box2D==2.3.10",
+    "stable-baselines3==2.9.2",
+    "torch==2.15.0",
+    "numpy==2.5.4",
+    "pandas==3.1.1",
+    "matplotlib==3.11.2",
+    "imageio==2.38.1",
+    "imageio-ffmpeg==0.8.1",
+    "pillow==13.0.0",
+    "pygame-ce==2.5.8",
+    "tensorboard==2.21.0",
+    "tqdm==4.70.1",
+    "pytest==9.2.0",
+    "hypothesis==6.170.15",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
-    "hypothesis",
+    "pytest==9.2.0",
+    "hypothesis==6.170.15",
 ]
 
 [tool.setuptools.packages.find]

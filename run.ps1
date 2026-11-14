@@ -90,6 +90,7 @@ switch ($Target.ToLower()) {
         Run-Explore
         Run-Tests
         Train-Quick
+        Run-Eval
         Run-Plots
         Run-Report
         Write-Host ">>> First-run verification complete!" -ForegroundColor Green
