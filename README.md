@@ -61,12 +61,12 @@ Because the telescoping sum depends solely on the initial state and is strictly 
 | Policy Variant | Reward Formulation | Primary Behavior | Landing Success | Mean Episode Score |
 | :--- | :--- | :--- | :---: | :---: |
 | **`baseline`** | Standard Gymnasium sparse + dense | Conservative retrograde burn, smooth touchdown | **90%** | **+229.2** |
-| **`hover_hack`** | Environment + naive state bonus | Crashes in most episodes; hover exploit not observed (100k-step smoke test) | **14%** | **-115.8** |
-| **`fixed`** | Potential-Based Reward Shaping (PBRS) | Crashes in 98% of episodes (100k-step smoke test; not trained to convergence) | **2%** | **-172.5** |
+| **`hover_hack`** | Environment + naive state bonus | **Exploit confirmed: times out in 100% of episodes** — hovers to the 1,000-step limit and never lands | **0%** | **-191.4** |
+| **`fixed`** | Potential-Based Reward Shaping (PBRS) | Lands in most episodes (30% timeout, 2% crash); fix works but lands slower than baseline | **68%** | **+107.5** |
 | **`random`** | Stochastic baseline (uniform action selection) | Uncontrolled tumble and high-velocity terrain impact | **0%** | **-175.5** |
-| **`time_penalty`** | Standard + per-step time fee | Not yet trained — no result | — | — |
+| **`time_penalty`** | Standard + per-step time fee | Lands 92% with near-baseline return; the time fee alone does not hurt landing | **92%** | **+220.2** |
 
-Measured 2026-11-08, re-confirmed 2026-11-11 with identical numbers: 50 episodes, deterministic policies, raw environment, seed-0 models. Baseline trained 500k steps; `hover_hack` and `fixed` are 100k-step smoke tests. Source data: `results/eval.csv`. Numbers will be re-measured after the full training runs.
+Measured 2026-11-16: 50 episodes, deterministic policies, raw environment, seed-0 models. All four trained configs now at 500k steps (baseline measured 2026-11-08, re-confirmed 2026-11-11 and 2026-11-16 with identical numbers). Source data: `results/eval.csv`. Numbers will be re-measured after the full 12-run matrix (seeds 1–2).
 
 ---
 
