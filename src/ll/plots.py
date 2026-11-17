@@ -325,11 +325,12 @@ def fig02_raw_vs_shaped_hack():
             plt.plot(df["timestep"], df["smooth_raw"], color="black", linestyle="--", lw=1.5, label="Raw Return")
             break
 
-    # Title states what the 100k-step data actually shows: shaped tracks
-    # raw with only a small bonus gap — the hover exploit has not emerged
-    # yet (see audit §1). The original "rises while raw stalls" claim
-    # described the intended phenomenon, not this smoke-test data.
-    plt.title("Hover Hack: Shaped vs. Raw Return (100k Steps — No Exploit Yet)")
+    # Title states what the 500k-step data actually shows: shaped return
+    # climbs far above raw and stays there — the hover exploit has emerged
+    # (hover_hack times out in 100% of eval episodes at 500k; see audit
+    # §1 and the 2026-11-16 eval). The old "No Exploit Yet" title described
+    # the 100k-step smoke-test data and is now wrong.
+    plt.title("Hover Hack: Shaped vs. Raw Return (500k Steps — Exploit Confirmed)")
     plt.xlabel("Timesteps")
     plt.ylabel("Return")
     plt.grid(True, alpha=0.3)

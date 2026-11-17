@@ -131,22 +131,22 @@
     <tr>
       <td>fixed</td>
       <td>0</td>
-      <td>-172.483933</td>
-      <td>65.098137</td>
-      <td>310.86</td>
+      <td>107.549759</td>
+      <td>67.049406</td>
+      <td>892.82</td>
+      <td>0.68</td>
+      <td>0.30</td>
       <td>0.02</td>
-      <td>0.00</td>
-      <td>0.98</td>
     </tr>
     <tr>
       <td>hover_hack</td>
       <td>0</td>
-      <td>-115.783774</td>
-      <td>119.352099</td>
-      <td>580.94</td>
-      <td>0.14</td>
-      <td>0.18</td>
-      <td>0.68</td>
+      <td>-191.440952</td>
+      <td>22.472919</td>
+      <td>1000.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
     </tr>
     <tr>
       <td>random</td>
@@ -157,6 +157,16 @@
       <td>0.00</td>
       <td>0.00</td>
       <td>1.00</td>
+    </tr>
+    <tr>
+      <td>time_penalty</td>
+      <td>0</td>
+      <td>220.157325</td>
+      <td>55.689912</td>
+      <td>461.10</td>
+      <td>0.92</td>
+      <td>0.04</td>
+      <td>0.04</td>
     </tr>
   </tbody>
 </table>
@@ -313,18 +323,18 @@
         </div>
         <img src="../figures/12_fixed_bonus_bounded.png" alt="Mathematical Proof of Bounded Bonus">
         <h3>Rollout Clips (seed 0, episode 0)</h3>
-        <p>One episode per policy, recorded from the real environment. Only the baseline is trained enough to land — the fixed and hover_hack models are 100k-step smoke tests and crash in these clips, which is why the hover exploit is not visible yet.</p>
+        <p>One episode per policy, recorded from the real environment at 500k steps. Baseline lands; fixed times out after hovering (it lands 68% of eval episodes); hover_hack never lands — it hovers to the 1,000-step limit, farming +931 shaping bonus in this clip, which is the exploit itself.</p>
         <div class="grid">
             <div>
                 <h3>Baseline — landed</h3>
                 <img src="../videos/baseline_seed0.gif" alt="Baseline Landing">
             </div>
             <div>
-                <h3>Fixed — crashed (100k steps)</h3>
+                <h3>Fixed — timed out, hovering (500k steps)</h3>
                 <img src="../videos/fixed_seed0.gif" alt="Fixed Policy">
             </div>
         </div>
-        <h3>Hover Hack — crashed (100k steps, no hover yet)</h3>
+        <h3>Hover Hack — timed out, hovering to the limit (500k steps, exploit confirmed)</h3>
         <img src="../videos/hover_hack_seed0.gif" alt="Hover Hack Policy">
         <h3>Side-by-Side Comparison</h3>
         <video controls src="../videos/comparison.mp4" width="100%"></video>

@@ -29,7 +29,7 @@ def print_banner():
 
 def print_menu():
     print("""  WATCH REAL-TIME LANDING VISUALS (Desktop Window):
-    [1] Launch Live Landing: Trained Baseline Agent (Extended High Orbit)
+    [1] Launch Live Landing: Trained Baseline Agent (Standard Approach)
     [2] Launch Live Simulation: Random Uncontrolled Rocket (Crash Test)
     [3] Launch Live Simulation: Hover Hack (Reward Hacked Agent)
     [4] Launch Live Simulation: Fixed Potential-Based Agent
@@ -60,8 +60,8 @@ def main_menu():
             break
 
         if choice == "1":
-            print("\n>>> Launching Real-Time Baseline Landing Simulation (High Orbit)...")
-            run_viewer(config="baseline", speed=1.0, altitude_mode="high")
+            print("\n>>> Launching Real-Time Baseline Landing Simulation (Standard Approach)...")
+            run_viewer(config="baseline", speed=1.0, altitude_mode="standard")
             try:
                 input("\nSimulation closed. Press [Enter] to return to menu...")
             except (EOFError, KeyboardInterrupt):
@@ -69,7 +69,7 @@ def main_menu():
 
         elif choice == "2":
             print("\n>>> Launching Real-Time Random Rocket Crash Simulation...")
-            run_viewer(config="random", speed=1.0, altitude_mode="high")
+            run_viewer(config="random", speed=1.0, altitude_mode="standard")
             try:
                 input("\nSimulation closed. Press [Enter] to return to menu...")
             except (EOFError, KeyboardInterrupt):
@@ -77,7 +77,7 @@ def main_menu():
 
         elif choice == "3":
             print("\n>>> Launching Real-Time Hover Hack Simulation...")
-            run_viewer(config="hover_hack", speed=1.0, altitude_mode="high")
+            run_viewer(config="hover_hack", speed=1.0, altitude_mode="standard")
             try:
                 input("\nSimulation closed. Press [Enter] to return to menu...")
             except (EOFError, KeyboardInterrupt):
@@ -85,7 +85,7 @@ def main_menu():
 
         elif choice == "4":
             print("\n>>> Launching Real-Time Fixed Agent Landing Simulation...")
-            run_viewer(config="fixed", speed=1.0, altitude_mode="high")
+            run_viewer(config="fixed", speed=1.0, altitude_mode="standard")
             try:
                 input("\nSimulation closed. Press [Enter] to return to menu...")
             except (EOFError, KeyboardInterrupt):

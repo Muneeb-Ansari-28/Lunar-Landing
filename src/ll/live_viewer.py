@@ -28,7 +28,7 @@ def run_viewer(
     headless: bool = False,
     record_path: str | None = None,
     deterministic: bool = True,
-    altitude_mode: str = "high",
+    altitude_mode: str = "standard",
 ):
     current_config = config
     loaded_models = {}
@@ -76,7 +76,10 @@ def run_viewer(
     print(f"🚀 LUNAR LANDER REAL-TIME DESKTOP SIMULATION STARTED")
     print(f"=======================================================")
     print(f"  Active Policy: {current_config.upper()} (Seed {seed})")
-    print(f"  Altitude:      {altitude_mode.upper()} ORBIT DESCENT (Extended Vertical Expanse)")
+    if altitude_mode == "high":
+        print("  Altitude:      HIGH ORBIT DESCENT (Extended Vertical Expanse)")
+    else:
+        print("  Altitude:      STANDARD APPROACH (evaluated behaviour)")
     print(f"  Mode:          {env_mode.upper()} environment")
     print(f"  Speed:         {speed}x (50 FPS physics)")
     print(f"-------------------------------------------------------")
@@ -133,7 +136,7 @@ def run_viewer(
                             print(">>> Resetting attempt...")
                         elif event.key == pygame.K_a:
                             altitude_mode = "standard" if altitude_mode == "high" else "high"
-                            print(f">>> Switched altitude profile to: {altitude_mode.upper()} ORBIT (restarting attempt...)")
+                            print(f">>> Switched altitude profile to: {altitude_mode.upper()} (restarting attempt...)")
                             done = True
                         elif event.key == pygame.K_c:
                             # Cycle policy
@@ -261,7 +264,7 @@ def main():
     ap.add_argument("--headless", action="store_true")
     ap.add_argument("--record", type=str, default=None)
     ap.add_argument("--stochastic", action="store_true")
-    ap.add_argument("--altitude", choices=["high", "standard"], default="high")
+    ap.add_argument("--altitude", choices=["high", "standard"], default="standard")
     a = ap.parse_args()
 
     run_viewer(

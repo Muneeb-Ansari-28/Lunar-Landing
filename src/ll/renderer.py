@@ -737,7 +737,7 @@ class LunarRenderer:
 
         cfg_color = CONFIG_COLORS.get(config, (60, 150, 255))
         pause_tag = " [PAUSED]" if paused else f" [{speed:.1f}x]"
-        alt_mode = (custom_hud_data or {}).get("altitude_mode", "high")
+        alt_mode = (custom_hud_data or {}).get("altitude_mode", "standard")
         alt_tag = "HIGH ORBIT" if alt_mode == "high" else "STANDARD"
 
         rows = [
