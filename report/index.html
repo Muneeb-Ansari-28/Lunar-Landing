@@ -129,6 +129,26 @@
       <td>0.04</td>
     </tr>
     <tr>
+      <td>baseline</td>
+      <td>1</td>
+      <td>186.575215</td>
+      <td>75.816808</td>
+      <td>534.14</td>
+      <td>0.88</td>
+      <td>0.02</td>
+      <td>0.10</td>
+    </tr>
+    <tr>
+      <td>baseline</td>
+      <td>2</td>
+      <td>4.582328</td>
+      <td>29.749410</td>
+      <td>999.66</td>
+      <td>0.02</td>
+      <td>0.98</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
       <td>fixed</td>
       <td>0</td>
       <td>107.549759</td>
@@ -139,10 +159,50 @@
       <td>0.02</td>
     </tr>
     <tr>
+      <td>fixed</td>
+      <td>1</td>
+      <td>245.075539</td>
+      <td>43.712624</td>
+      <td>346.88</td>
+      <td>0.96</td>
+      <td>0.02</td>
+      <td>0.02</td>
+    </tr>
+    <tr>
+      <td>fixed</td>
+      <td>2</td>
+      <td>236.011407</td>
+      <td>64.675412</td>
+      <td>324.08</td>
+      <td>0.90</td>
+      <td>0.04</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
       <td>hover_hack</td>
       <td>0</td>
       <td>-191.440952</td>
       <td>22.472919</td>
+      <td>1000.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <td>hover_hack</td>
+      <td>1</td>
+      <td>-291.563305</td>
+      <td>39.800695</td>
+      <td>1000.00</td>
+      <td>0.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <td>hover_hack</td>
+      <td>2</td>
+      <td>-176.975438</td>
+      <td>24.609319</td>
       <td>1000.00</td>
       <td>0.00</td>
       <td>1.00</td>
@@ -167,6 +227,26 @@
       <td>0.92</td>
       <td>0.04</td>
       <td>0.04</td>
+    </tr>
+    <tr>
+      <td>time_penalty</td>
+      <td>1</td>
+      <td>230.151357</td>
+      <td>60.268496</td>
+      <td>396.56</td>
+      <td>0.90</td>
+      <td>0.06</td>
+      <td>0.04</td>
+    </tr>
+    <tr>
+      <td>time_penalty</td>
+      <td>2</td>
+      <td>208.187566</td>
+      <td>44.665298</td>
+      <td>568.94</td>
+      <td>0.94</td>
+      <td>0.06</td>
+      <td>0.00</td>
     </tr>
   </tbody>
 </table>
@@ -323,7 +403,7 @@
         </div>
         <img src="../figures/12_fixed_bonus_bounded.png" alt="Mathematical Proof of Bounded Bonus">
         <h3>Rollout Clips (seed 0, episode 0)</h3>
-        <p>One episode per policy, recorded from the real environment at 500k steps. Baseline lands; fixed times out after hovering (it lands 68% of eval episodes); hover_hack never lands — it hovers to the 1,000-step limit, farming +931 shaping bonus in this clip, which is the exploit itself.</p>
+        <p>One episode per policy, recorded from the real environment at 500k steps (seed 0). Baseline lands; fixed times out after hovering in this clip — across 3 seeds it lands 85% of eval episodes (68/96/90%); hover_hack never lands — it hovers to the 1,000-step limit, farming +931 shaping bonus in this clip, which is the exploit itself.</p>
         <div class="grid">
             <div>
                 <h3>Baseline — landed</h3>

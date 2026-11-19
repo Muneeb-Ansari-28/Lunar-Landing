@@ -60,13 +60,13 @@ Because the telescoping sum depends solely on the initial state and is strictly 
 
 | Policy Variant | Reward Formulation | Primary Behavior | Landing Success | Mean Episode Score |
 | :--- | :--- | :--- | :---: | :---: |
-| **`baseline`** | Standard Gymnasium sparse + dense | Conservative retrograde burn, smooth touchdown | **90%** | **+229.2** |
-| **`hover_hack`** | Environment + naive state bonus | **Exploit confirmed: times out in 100% of episodes** — hovers to the 1,000-step limit and never lands | **0%** | **-191.4** |
-| **`fixed`** | Potential-Based Reward Shaping (PBRS) | Lands in most episodes (30% timeout, 2% crash); fix works but lands slower than baseline | **68%** | **+107.5** |
+| **`baseline`** | Standard Gymnasium sparse + dense | Lands in 2 of 3 seeds; seed 2 times out in 98% of episodes — high seed variance | **60% ± 50pp** | **+140.1 ± 119.3** |
+| **`hover_hack`** | Environment + naive state bonus | **Exploit confirmed in all 3 seeds: times out in 100% of episodes** — hovers to the 1,000-step limit and never lands | **0%** | **-220.0 ± 62.4** |
+| **`fixed`** | Potential-Based Reward Shaping (PBRS) | Lands in most episodes (mean 12% timeout, 3% crash); fix works across all seeds | **85% ± 15pp** | **+196.2 ± 76.9** |
 | **`random`** | Stochastic baseline (uniform action selection) | Uncontrolled tumble and high-velocity terrain impact | **0%** | **-175.5** |
-| **`time_penalty`** | Standard + per-step time fee | Lands 92% with near-baseline return; the time fee alone does not hurt landing | **92%** | **+220.2** |
+| **`time_penalty`** | Standard + per-step time fee | Lands 90–94% in every seed; the time fee alone does not hurt landing | **92% ± 2pp** | **+219.5 ± 11.0** |
 
-Measured 2026-11-16: 50 episodes, deterministic policies, raw environment, seed-0 models. All four trained configs now at 500k steps (baseline measured 2026-11-08, re-confirmed 2026-11-11 and 2026-11-16 with identical numbers). Source data: `results/eval.csv`. Numbers will be re-measured after the full 12-run matrix (seeds 1–2).
+Measured 2026-11-19: 50 episodes per model, deterministic policies, raw environment, 3 seeds per config (12 models, all 500k steps). Mean ± std across seeds; landing success in percentage points. Source data: `results/eval.csv`, `results/eval_summary.csv`. Seed-0 numbers (2026-11-16): baseline 90% / +229.2, hover_hack 0% / −191.4, fixed 68% / +107.5, time_penalty 92% / +220.2. The full 12-run matrix is now complete.
 
 ---
 

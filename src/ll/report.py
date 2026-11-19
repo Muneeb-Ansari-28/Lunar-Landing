@@ -183,7 +183,7 @@ def build_report():
         </div>
         <img src="../figures/12_fixed_bonus_bounded.png" alt="Mathematical Proof of Bounded Bonus">
         <h3>Rollout Clips (seed 0, episode 0)</h3>
-        <p>One episode per policy, recorded from the real environment at 500k steps. Baseline lands; fixed times out after hovering (it lands 68% of eval episodes); hover_hack never lands — it hovers to the 1,000-step limit, farming +931 shaping bonus in this clip, which is the exploit itself.</p>
+        <p>One episode per policy, recorded from the real environment at 500k steps (seed 0). Baseline lands; fixed times out after hovering in this clip — across 3 seeds it lands 85% of eval episodes (68/96/90%); hover_hack never lands — it hovers to the 1,000-step limit, farming +931 shaping bonus in this clip, which is the exploit itself.</p>
         <div class="grid">
             <div>
                 <h3>Baseline — landed</h3>
